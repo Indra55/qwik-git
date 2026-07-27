@@ -63,6 +63,11 @@ func main(){
 			zw.Write(buf)
 			zw.Close()
 			fmt.Println("compressed_output:",compressed_output.Bytes())
+			err=storeObjects(hash,compressed_output.Bytes())
+			if err!=nil {
+				fmt.Println("Error:",err)
+				return
+			}
 			
 		default:
 			fmt.Println("Unknown command:", command)
