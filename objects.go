@@ -35,3 +35,17 @@ func storeObjects(hash string, compressed []byte) error {
 	}
 	return nil
 }
+
+func catObject(hash string) ([]byte,error) {
+	dirName:=hash[0:2]
+	fileName:=hash[2:]
+
+	filePath:=".qwik/objects/"+dirName+"/"+fileName
+	data, err:=os.ReadFile(filePath)
+	if err!=nil {
+		return nil,err
+	}
+	
+	return data,nil
+}
+

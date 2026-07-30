@@ -68,7 +68,13 @@ func main(){
 				fmt.Println("Error:",err)
 				return
 			}
-			
+		case "cat-file":
+			data, err := catObject("b870d82622c1a9ca6bcaf5df639680424a1904b0")
+			if err != nil {
+			    fmt.Println("Error:", err)
+			    return
+			}
+			fmt.Println(len(data))
 		default:
 			fmt.Println("Unknown command:", command)
 	}
