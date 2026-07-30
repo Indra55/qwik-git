@@ -69,12 +69,27 @@ func main(){
 				return
 			}
 		case "cat-file":
-			data, err := catObject("b870d82622c1a9ca6bcaf5df639680424a1904b0")
+			if len(argsWithoutProg)< 2 {
+				fmt.Println("Not enough arguments! (Maybe hash missing?)")
+				return
+			}
+			hashArg := argsWithoutProg[1]
+			data, err:= catObject(hashArg)
 			if err != nil {
 			    fmt.Println("Error:", err)
 			    return
 			}
-			fmt.Println(len(data))
+			decompressed_data, err:=decompress(data)
+			if err!=nil {
+				fmt.Println("Error: ",err)
+				return
+			}
+			headerless_data, err:=stripHeader(decompressed_data)
+			if err!=nil {
+				fmt.Println("Error: ",err)
+				return
+			} 
+			fmt.Println(string(headerless_data))
 		default:
 			fmt.Println("Unknown command:", command)
 	}

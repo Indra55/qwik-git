@@ -1,10 +1,14 @@
 package main
 
 import (
+	"bytes"
+	"compress/zlib"
 	"crypto/sha1"
 	"encoding/hex"
 	"fmt"
 	"os"
+	"io"
+	"errors"
 )
 
 func hashObjects(data []byte) (string, []byte) {
@@ -49,3 +53,27 @@ func catObject(hash string) ([]byte,error) {
 	return data,nil
 }
 
+func decompress(data []byte) ([]byte, error){
+		newData:= bytes.NewReader(data)
+		zr, err:=zlib.NewReader(newData)
+		if err!=nil {
+			return nil ,err
+		}
+		defer zr.Close()
+		finalData, err:=io.ReadAll(zr)
+		if err!=nil{
+			return nil, err
+		}
+		return finalData, nil
+		
+}
+
+func stripHeader(data []byte) ([]byte,error){
+	index:=bytes.IndexByte(data,0)
+
+	if index!=-1{
+		return data[index+1:],nil
+	}else {
+		return nil, errors.New("no null byte found in data")
+	}
+}
